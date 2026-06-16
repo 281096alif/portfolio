@@ -1,643 +1,416 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Alif — ML Engineer & Developer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg: #0a0a0f;
-    --surface: #13131a;
-    --border: #ffffff18;
-    --text: #f0eee8;
-    --muted: #8b8a9a;
-    --accent1: #ff6b35;
-    --accent2: #7c3aed;
-    --accent3: #06d6a0;
-    --accent4: #f72585;
-    --accent5: #ffd60a;
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
-    line-height: 1.7;
-    cursor: none;
-  }
-
-  /* Custom cursor */
-  #cursor {
-    position: fixed;
-    width: 12px; height: 12px;
-    background: var(--accent1);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s, background 0.2s;
-  }
-  #cursor-ring {
-    position: fixed;
-    width: 36px; height: 36px;
-    border: 1.5px solid var(--accent1);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: transform 0.18s ease, width 0.2s, height 0.2s, opacity 0.2s;
-    opacity: 0.5;
-  }
-
-  /* ─── NAV ─── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1.2rem 3rem;
-    background: rgba(10,10,15,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-logo {
-    font-family: 'Space Mono', monospace;
-    font-size: 1.1rem;
-    color: var(--accent1);
-    text-decoration: none;
-  }
-  .nav-links { display: flex; gap: 2rem; list-style: none; }
-  .nav-links a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-family: 'Space Mono', monospace;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--text); }
-
-  /* ─── HERO ─── */
-  #hero {
-    min-height: 100vh;
-    display: flex; flex-direction: column; justify-content: center;
-    padding: 0 3rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-bg {
-    position: absolute; inset: 0; pointer-events: none;
-  }
-  .blob {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.15;
-    animation: float 8s ease-in-out infinite;
-  }
-  .blob1 { width: 500px; height: 500px; background: var(--accent2); top: -100px; right: -100px; animation-delay: 0s; }
-  .blob2 { width: 350px; height: 350px; background: var(--accent4); bottom: 0; left: -80px; animation-delay: 3s; }
-  .blob3 { width: 280px; height: 280px; background: var(--accent3); top: 40%; left: 40%; animation-delay: 1.5s; }
-  @keyframes float {
-    0%,100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-30px) scale(1.05); }
-  }
-
-  .hero-eyebrow {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.8rem;
-    color: var(--accent3);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-    opacity: 0; animation: fadeUp 0.6s 0.2s forwards;
-  }
-  .hero-name {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(3rem, 8vw, 7rem);
-    font-weight: 800;
-    line-height: 1;
-    margin-bottom: 0.5rem;
-    opacity: 0; animation: fadeUp 0.7s 0.4s forwards;
-  }
-  .hero-name span.hi { color: var(--accent1); }
-  .hero-nick {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(1.5rem, 4vw, 3rem);
-    font-weight: 400;
-    color: var(--muted);
-    margin-bottom: 1.5rem;
-    opacity: 0; animation: fadeUp 0.7s 0.5s forwards;
-  }
-  .hero-nick span { color: var(--accent5); font-weight: 700; }
-
-  .hero-tags {
-    display: flex; flex-wrap: wrap; gap: 0.6rem;
-    margin-bottom: 2rem;
-    opacity: 0; animation: fadeUp 0.7s 0.7s forwards;
-  }
-  .tag {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.75rem;
-    padding: 0.35rem 0.9rem;
-    border-radius: 999px;
-    border: 1px solid;
-  }
-  .tag-orange { color: var(--accent1); border-color: var(--accent1); }
-  .tag-purple { color: var(--accent2); border-color: var(--accent2); }
-  .tag-green  { color: var(--accent3); border-color: var(--accent3); }
-  .tag-pink   { color: var(--accent4); border-color: var(--accent4); }
-  .tag-yellow { color: var(--accent5); border-color: var(--accent5); }
-
-  .hero-cta {
-    display: flex; gap: 1rem; flex-wrap: wrap;
-    opacity: 0; animation: fadeUp 0.7s 0.9s forwards;
-  }
-  .btn-primary {
-    display: inline-block;
-    background: var(--accent1);
-    color: #0a0a0f;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.85rem;
-    font-weight: 700;
-    padding: 0.85rem 2rem;
-    border-radius: 4px;
-    text-decoration: none;
-    transition: transform 0.15s, box-shadow 0.15s;
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(255,107,53,0.35); }
-  .btn-ghost {
-    display: inline-block;
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-family: 'Space Mono', monospace;
-    font-size: 0.85rem;
-    padding: 0.85rem 2rem;
-    border-radius: 4px;
-    text-decoration: none;
-    transition: border-color 0.2s, color 0.2s;
-  }
-  .btn-ghost:hover { border-color: var(--text); }
-
-  .scroll-hint {
-    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--muted);
-    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-    animation: pulse 2s ease-in-out infinite;
-  }
-  .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--muted), transparent); }
-  @keyframes pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ─── SECTIONS ─── */
-  section { padding: 6rem 3rem; }
-  .section-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--accent3);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-bottom: 0.75rem;
-  }
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 800;
-    margin-bottom: 3rem;
-    line-height: 1.15;
-  }
-
-  /* ─── ABOUT ─── */
-  #about { background: var(--surface); }
-  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
-  .about-text p { color: var(--muted); margin-bottom: 1rem; font-size: 1.05rem; }
-  .about-text p strong { color: var(--text); }
-  .edu-card {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 1rem;
-    border-left: 3px solid var(--accent1);
-  }
-  .edu-card:nth-child(2) { border-left-color: var(--accent2); }
-  .edu-card:nth-child(3) { border-left-color: var(--accent3); }
-  .edu-degree { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; }
-  .edu-school { color: var(--muted); font-size: 0.85rem; margin-top: 0.2rem; }
-  .edu-gpa {
-    display: inline-block;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--accent5);
-    background: rgba(255,214,10,0.08);
-    padding: 0.2rem 0.6rem;
-    border-radius: 4px;
-    margin-top: 0.4rem;
-  }
-
-  /* ─── SKILLS ─── */
-  #skills { background: var(--bg); }
-  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
-  .skill-group {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.5rem;
-    transition: border-color 0.2s, transform 0.2s;
-  }
-  .skill-group:hover { border-color: var(--accent1); transform: translateY(-4px); }
-  .skill-group-title {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 1rem;
-  }
-  .skill-group:nth-child(1) .skill-group-title { color: var(--accent1); }
-  .skill-group:nth-child(2) .skill-group-title { color: var(--accent2); }
-  .skill-group:nth-child(3) .skill-group-title { color: var(--accent3); }
-  .skill-group:nth-child(4) .skill-group-title { color: var(--accent4); }
-  .skill-group:nth-child(5) .skill-group-title { color: var(--accent5); }
-  .skill-group:nth-child(6) .skill-group-title { color: var(--accent1); }
-  .skill-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-  .skill-pill {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    font-size: 0.78rem;
-    padding: 0.25rem 0.6rem;
-    color: var(--text);
-    font-family: 'Space Mono', monospace;
-  }
-
-  /* ─── RESEARCH ─── */
-  #research { background: var(--surface); }
-  .research-list { display: flex; flex-direction: column; gap: 1.5rem; }
-  .research-card {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.75rem 2rem;
-    display: grid; grid-template-columns: 1fr auto;
-    gap: 1rem; align-items: start;
-    transition: border-color 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-  .research-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  }
-  .research-card:nth-child(1)::before { background: var(--accent1); }
-  .research-card:nth-child(2)::before { background: var(--accent3); }
-  .research-card:nth-child(3)::before { background: var(--accent2); }
-  .research-card:nth-child(4)::before { background: var(--accent4); }
-  .research-card:hover { border-color: rgba(255,255,255,0.2); }
-  .research-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; }
-  .research-tech { color: var(--muted); font-size: 0.85rem; margin-bottom: 0.5rem; }
-  .research-badge {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    padding: 0.3rem 0.7rem;
-    border-radius: 4px;
-    white-space: nowrap;
-    align-self: start;
-  }
-  .badge-published { background: rgba(6,214,160,0.12); color: var(--accent3); border: 1px solid rgba(6,214,160,0.3); }
-  .badge-ongoing   { background: rgba(255,107,53,0.12); color: var(--accent1); border: 1px solid rgba(255,107,53,0.3); }
-  .badge-review    { background: rgba(124,58,237,0.12); color: #a78bfa;      border: 1px solid rgba(124,58,237,0.3); }
-  .research-link { color: var(--accent3); font-size: 0.82rem; text-decoration: none; font-family: 'Space Mono', monospace; }
-  .research-link:hover { text-decoration: underline; }
-
-  /* ─── PROJECTS ─── */
-  #projects { background: var(--bg); }
-  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-  .project-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 2rem;
-    display: flex; flex-direction: column;
-    transition: transform 0.2s, border-color 0.2s;
-  }
-  .project-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.2); }
-  .project-icon {
-    width: 48px; height: 48px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    margin-bottom: 1rem;
-  }
-  .icon-orange { background: rgba(255,107,53,0.15); }
-  .icon-purple { background: rgba(124,58,237,0.15); }
-  .icon-green  { background: rgba(6,214,160,0.15); }
-  .project-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.6rem; }
-  .project-desc { color: var(--muted); font-size: 0.9rem; flex: 1; margin-bottom: 1rem; }
-  .project-award {
-    display: inline-flex; align-items: center; gap: 0.4rem;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--accent5);
-    background: rgba(255,214,10,0.08);
-    padding: 0.3rem 0.7rem; border-radius: 4px;
-    margin-bottom: 1rem;
-    border: 1px solid rgba(255,214,10,0.2);
-  }
-  .project-stack { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-  .stack-pill {
-    font-size: 0.72rem;
-    font-family: 'Space Mono', monospace;
-    padding: 0.2rem 0.55rem;
-    background: rgba(255,255,255,0.05);
-    border-radius: 3px;
-    color: var(--muted);
-  }
-
-  /* ─── CONTACT ─── */
-  #contact { background: var(--surface); text-align: center; }
-  .contact-inner { max-width: 600px; margin: 0 auto; }
-  .contact-big {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2.5rem, 6vw, 5rem);
-    font-weight: 800;
-    line-height: 1;
-    margin-bottom: 1.5rem;
-  }
-  .contact-big span { color: var(--accent1); }
-  .contact-sub { color: var(--muted); margin-bottom: 2.5rem; }
-  .contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
-  .contact-link {
-    display: flex; align-items: center; gap: 0.5rem;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.82rem;
-    color: var(--muted);
-    text-decoration: none;
-    padding: 0.6rem 1.2rem;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    transition: color 0.2s, border-color 0.2s;
-  }
-  .contact-link:hover { color: var(--text); border-color: rgba(255,255,255,0.3); }
-
-  /* ─── FOOTER ─── */
-  footer {
-    text-align: center;
-    padding: 2rem;
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-    font-size: 0.75rem;
-    border-top: 1px solid var(--border);
-  }
-
-  /* Reveal animation on scroll */
-  .reveal {
-    opacity: 0; transform: translateY(24px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-  .reveal.visible { opacity: 1; transform: none; }
-
-  @media (max-width: 768px) {
-    nav { padding: 1rem 1.5rem; }
-    .nav-links { display: none; }
-    section { padding: 4rem 1.5rem; }
-    #hero { padding: 0 1.5rem; }
-    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Md. Shoaib Shahria — ML Engineer & Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        background: '#030712',
+                        surface: '#0f172a',
+                        border: '#1e293b',
+                        muted: '#94a3b8',
+                        primary: '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #030712; color: #f8fafc; }
+        .glass-nav { background: rgba(3, 7, 18, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid #1e293b; }
+        .gradient-text { background: linear-gradient(to right, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .typewriter { overflow: hidden; white-space: nowrap; border-right: 2px solid #60a5fa; animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite; }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #60a5fa; } }
+        .card { background-color: #0f172a; border: 1px solid #1e293b; transition: all 0.2s ease-in-out; border-radius: 1rem; }
+        .card:hover { border-color: #334155; transform: translateY(-4px); box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5); }
+        .pill { background: rgba(255,255,255,0.05); border: 1px solid #334155; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.875rem; color: #cbd5e1; }
+        section { padding-top: 6rem; padding-bottom: 6rem; }
+    </style>
 </head>
-<body>
+<body class="antialiased selection:bg-blue-500/30">
 
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
+    <nav class="fixed top-0 w-full z-50 glass-nav transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="#home" class="font-bold text-xl tracking-tight text-white hover:text-gray-300 transition-colors">freakyalif.me</a>
+            <div class="hidden md:flex gap-8 text-sm font-medium text-gray-400">
+                <a href="#home" class="hover:text-white transition-colors">Home</a>
+                <a href="#about" class="hover:text-white transition-colors">About</a>
+                <a href="#skills" class="hover:text-white transition-colors">Skills</a>
+                <a href="#research" class="hover:text-white transition-colors">Research</a>
+                <a href="#projects" class="hover:text-white transition-colors">Projects</a>
+                <a href="#contact" class="hover:text-white transition-colors">Contact</a>
+            </div>
+            <button class="md:hidden text-gray-400 hover:text-white">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+    </nav>
 
-<nav>
-  <a href="#hero" class="nav-logo">freakyalif.me</a>
-  <ul class="nav-links">
-    <li><a href="#about">about</a></li>
-    <li><a href="#skills">skills</a></li>
-    <li><a href="#research">research</a></li>
-    <li><a href="#projects">projects</a></li>
-    <li><a href="#contact">contact</a></li>
-  </ul>
-</nav>
+    <main id="home" class="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden max-w-6xl mx-auto px-6">
+        <div class="absolute w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[100px] -top-32 -left-32 pointer-events-none"></div>
+        <div class="absolute w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[100px] bottom-32 -right-32 pointer-events-none"></div>
+        
+        <div class="w-full">
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 mt-12 md:mt-0">
+                Hi, I'm <br class="md:hidden"/><span class="gradient-text">Md. Shoaib Shahria (Alif)</span>
+            </h1>
+            <div class="text-xl md:text-3xl font-medium text-gray-400 mb-8 inline-block">
+                <span class="typewriter inline-block">ML Engineer & Developer</span>
+            </div>
+            <p class="text-slate-400 max-w-2xl text-lg mb-10 leading-relaxed text-pretty">
+                I build machine learning solutions and modern web applications with clean code. Passionate about turning data into real solutions and creating experiences that matter.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="#projects" class="bg-white text-black px-6 py-3 rounded-md font-medium hover:bg-gray-200 transition-colors flex items-center gap-2">
+                    View Projects
+                </a>
+                <a href="#contact" class="bg-[#0f172a] border border-[#1e293b] text-white px-6 py-3 rounded-md font-medium hover:bg-[#1e293b] transition-colors">
+                    Contact Me
+                </a>
+            </div>
+        </div>
+    </main>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-bg">
-    <div class="blob blob1"></div>
-    <div class="blob blob2"></div>
-    <div class="blob blob3"></div>
-  </div>
-  <p class="hero-eyebrow">👋 Hello, world</p>
-  <h1 class="hero-name"><span class="hi">Md. Shoaib</span><br>Shahria</h1>
-  <p class="hero-nick">aka <span>Alif</span></p>
-  <div class="hero-tags">
-    <span class="tag tag-orange">ML Engineer</span>
-    <span class="tag tag-purple">Python Specialist</span>
-    <span class="tag tag-green">Data Engineer</span>
-    <span class="tag tag-pink">Full-Stack Dev</span>
-    <span class="tag tag-yellow">Researcher</span>
-  </div>
-  <div class="hero-cta">
-    <a href="#contact" class="btn-primary">Get in touch</a>
-    <a href="#research" class="btn-ghost">View research ↓</a>
-  </div>
-  <div class="scroll-hint">
-    <span>scroll</span>
-    <div class="scroll-line"></div>
-  </div>
-</section>
+    <section id="about" class="border-t border-[#1e293b] max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-12">About Me</h2>
+        
+        <div class="grid md:grid-cols-2 gap-12 items-start">
+            <div>
+                <h3 class="text-xl font-semibold mb-6 flex items-center gap-2">
+                    <i data-lucide="terminal" class="w-5 h-5 text-blue-400"></i> Turning data into real solutions.
+                </h3>
+                <p class="text-slate-400 leading-relaxed mb-4">
+                    I'm a <strong>Computer Science graduate</strong> from United International University, Dhaka with a deep passion for machine learning, data engineering, and building things that matter.
+                </p>
+                <p class="text-slate-400 leading-relaxed mb-4">
+                    I've led projects that span from publishing research papers and deploying production ML models to building IoT devices that help rural communities. I love turning messy problems into clean, working code.
+                </p>
+                <p class="text-slate-400 leading-relaxed mb-8">
+                    Currently seeking opportunities where I can blend my Python + ML expertise with real-world impact in data-driven environments.
+                </p>
 
-<!-- ABOUT -->
-<section id="about">
-  <p class="section-label reveal">About me</p>
-  <h2 class="section-title reveal">Turning data into<br><span style="color:var(--accent1)">real solutions.</span></h2>
-  <div class="about-grid">
-    <div class="about-text reveal">
-      <p>I'm a <strong>Computer Science graduate</strong> from United International University, Dhaka with a deep passion for machine learning, data engineering, and building things that matter.</p>
-      <p>I've led projects that span from <strong>publishing research papers</strong> and deploying production ML models to building IoT devices that help rural communities. I love turning messy problems into clean, working code.</p>
-      <p>Currently seeking opportunities where I can blend my <strong>Python + ML expertise</strong> with real-world impact in data-driven environments.</p>
-    </div>
-    <div class="reveal">
-      <p class="section-label" style="margin-bottom:1rem;">Education</p>
-      <div class="edu-card">
-        <div class="edu-degree">BSc in Computer Science & Engineering</div>
-        <div class="edu-school">United International University, Dhaka</div>
-        <span class="edu-gpa">CGPA 3.43 / 4.00 — Feb 2026</span>
-      </div>
-      <div class="edu-card">
-        <div class="edu-degree">Higher Secondary Certificate (HSC)</div>
-        <div class="edu-school">Govt. Shah Sultan College, Dhaka</div>
-        <span class="edu-gpa">GPA 5.00 / 5.00 — 2020</span>
-      </div>
-      <div class="edu-card">
-        <div class="edu-degree">Secondary School Certificate (SSC)</div>
-        <div class="edu-school">BIAM Model School & College, Bogura</div>
-        <span class="edu-gpa">GPA 5.00 / 5.00 — 2018</span>
-      </div>
-    </div>
-  </div>
-</section>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="./documents/Md_Shoaib_Shahra_CV.pdf" download class="bg-[#0f172a] border border-[#1e293b] px-6 py-3 rounded-md font-medium hover:bg-[#1e293b] transition flex items-center justify-center gap-2">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        Download Resume (.pdf)
+                    </a>
+                    <a href="./documents/Md_Shoaib_Shahra_CV.docx" download class="bg-[#0f172a] border border-[#1e293b] px-6 py-3 rounded-md font-medium hover:bg-[#1e293b] transition flex items-center justify-center gap-2">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        Download Resume (.docx)
+                    </a>
+                </div>
+            </div>
 
-<!-- SKILLS -->
-<section id="skills">
-  <p class="section-label reveal">What I work with</p>
-  <h2 class="section-title reveal">Technical <span style="color:var(--accent2)">skills.</span></h2>
-  <div class="skills-grid reveal">
-    <div class="skill-group">
-      <p class="skill-group-title">Languages</p>
-      <div class="skill-pills">
-        <span class="skill-pill">Python</span><span class="skill-pill">C/C++</span><span class="skill-pill">JavaScript</span><span class="skill-pill">PHP</span><span class="skill-pill">Java</span>
-      </div>
-    </div>
-    <div class="skill-group">
-      <p class="skill-group-title">ML / AI</p>
-      <div class="skill-pills">
-        <span class="skill-pill">TensorFlow</span><span class="skill-pill">PyTorch</span><span class="skill-pill">scikit-learn</span><span class="skill-pill">OpenCV</span><span class="skill-pill">YOLO</span><span class="skill-pill">Roboflow</span>
-      </div>
-    </div>
-    <div class="skill-group">
-      <p class="skill-group-title">Web</p>
-      <div class="skill-pills">
-        <span class="skill-pill">React.js</span><span class="skill-pill">HTML/CSS</span><span class="skill-pill">Tailwind</span><span class="skill-pill">Bootstrap</span><span class="skill-pill">Flask</span>
-      </div>
-    </div>
-    <div class="skill-group">
-      <p class="skill-group-title">Databases</p>
-      <div class="skill-pills">
-        <span class="skill-pill">MySQL</span><span class="skill-pill">MongoDB</span>
-      </div>
-    </div>
-    <div class="skill-group">
-      <p class="skill-group-title">DevOps & Tools</p>
-      <div class="skill-pills">
-        <span class="skill-pill">Git</span><span class="skill-pill">Docker</span><span class="skill-pill">Vercel</span><span class="skill-pill">Firebase</span><span class="skill-pill">Netlify</span>
-      </div>
-    </div>
-    <div class="skill-group">
-      <p class="skill-group-title">Hardware</p>
-      <div class="skill-pills">
-        <span class="skill-pill">Raspberry Pi</span><span class="skill-pill">Arduino</span><span class="skill-pill">ESP32</span>
-      </div>
-    </div>
-  </div>
-</section>
+            <div class="flex flex-col items-center space-y-6">
+                <!-- Profile Image Component -->
+                <div class="relative group">
+                    <div class="absolute inset-0 bg-blue-500 rounded-2xl blur-lg opacity-20 group-hover:opacity-40 transition duration-500"></div>
+                    <img src="./assets/images/profile.jpg" alt="Md. Shoaib Shahria" class="relative z-10 w-full max-w-sm rounded-2xl border border-[#1e293b] object-cover aspect-square shadow-2xl transition duration-500 group-hover:scale-[1.02]">
+                </div>
+                
+                <div class="w-full max-w-sm space-y-4">
+                    <div class="card p-4">
+                        <div class="font-semibold text-sm">BSc in Computer Science & Engineering</div>
+                        <div class="text-slate-400 text-xs mt-1">United International University, Dhaka</div>
+                        <div class="text-blue-400 text-xs mt-2 font-mono">CGPA 3.43 / 4.00 — Feb 2026</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- RESEARCH -->
-<section id="research">
-  <p class="section-label reveal">Published & ongoing work</p>
-  <h2 class="section-title reveal">Research <span style="color:var(--accent3)">papers.</span></h2>
-  <div class="research-list">
-    <div class="research-card reveal">
-      <div>
-        <p class="research-title">TBX-Enhance: Deep Learning Based Low-Dose X-Ray Enhancement for Tuberculosis Detection</p>
-        <p class="research-tech">OpenCV · GAN · Python · DenseNet-121 · U-Net</p>
-      </div>
-      <span class="research-badge badge-ongoing">Ongoing</span>
-    </div>
-    <div class="research-card reveal">
-      <div>
-        <p class="research-title">BengalDeltaFish: A Local Dataset for Fish Detection in Bangladeshi Markets</p>
-        <p class="research-tech">Roboflow · YOLO</p>
-        <a class="research-link" href="https://doi.org/10.1016/j.dib.2025.111764" target="_blank">↗ Data in Brief — doi.org/10.1016/j.dib.2025.111764</a>
-      </div>
-      <span class="research-badge badge-published">Published</span>
-    </div>
-    <div class="research-card reveal">
-      <div>
-        <p class="research-title">BDFish: An Application for Fish Detection in Bangladeshi Markets</p>
-        <p class="research-tech">Kotlin · YOLO · Ultralytics · Roboflow</p>
-      </div>
-      <span class="research-badge badge-review">Under Review</span>
-    </div>
-    <div class="research-card reveal">
-      <div>
-        <p class="research-title">Eco-Friendly Inference: Energy Savings Through Prompt Compression</p>
-        <p class="research-tech">Ollama · Transformers · Python 3</p>
-      </div>
-      <span class="research-badge badge-review">Under Review</span>
-    </div>
-  </div>
-</section>
+    <section id="skills" class="border-t border-[#1e293b] max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-4">Skills & Technologies</h2>
+        <p class="text-slate-400 mb-12">Technologies I work with to build amazing solutions</p>
 
-<!-- PROJECTS -->
-<section id="projects">
-  <p class="section-label reveal">Things I've built</p>
-  <h2 class="section-title reveal">Featured <span style="color:var(--accent4)">projects.</span></h2>
-  <div class="projects-grid">
-    <div class="project-card reveal">
-      <div class="project-icon icon-orange">🏥</div>
-      <p class="project-name">Doctor Station</p>
-      <p class="project-desc">An IoT AI-doctor device providing basic medical suggestions to prevent scams in rural areas. Uses LLM prompt tuning to deliver accurate patient assistance on Raspberry Pi hardware.</p>
-      <span class="project-award">🏆 Champion — Microprocessor Lab Project Show</span>
-      <div class="project-stack">
-        <span class="stack-pill">React</span><span class="stack-pill">Flask</span><span class="stack-pill">Groq API</span><span class="stack-pill">Llama-3.3 70B</span><span class="stack-pill">Raspberry Pi</span><span class="stack-pill">Arduino</span><span class="stack-pill">ESP32</span>
-      </div>
-    </div>
-    <div class="project-card reveal">
-      <div class="project-icon icon-purple">📋</div>
-      <p class="project-name">Unravel</p>
-      <p class="project-desc">An intelligent project management system with Kanban & Gantt views, AI-assisted task assignment, automated reminders, and real-time collaboration tools for team productivity.</p>
-      <div class="project-stack">
-        <span class="stack-pill">PHP</span><span class="stack-pill">HTML/CSS</span><span class="stack-pill">JavaScript</span><span class="stack-pill">MySQL</span><span class="stack-pill">Selenium</span>
-      </div>
-    </div>
-    <div class="project-card reveal">
-      <div class="project-icon icon-green">📚</div>
-      <p class="project-name">Bibliophiles Corner</p>
-      <p class="project-desc">A community platform for book enthusiasts to explore, discover, and review books. Features review sharing and a clean UI designed to foster reader engagement.</p>
-      <div class="project-stack">
-        <span class="stack-pill">HTML/CSS</span><span class="stack-pill">JavaScript</span><span class="stack-pill">PHP</span><span class="stack-pill">Bootstrap</span><span class="stack-pill">MySQL</span>
-      </div>
-    </div>
-  </div>
-</section>
+        <div class="space-y-10">
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-white">Languages</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="pill">Python</span><span class="pill">C/C++</span><span class="pill">JavaScript</span><span class="pill">PHP</span><span class="pill">Java</span>
+                </div>
+            </div>
 
-<!-- CONTACT -->
-<section id="contact">
-  <div class="contact-inner">
-    <p class="section-label reveal" style="text-align:center;">Let's connect</p>
-    <h2 class="contact-big reveal">Let's work<br><span>together.</span></h2>
-    <p class="contact-sub reveal">Open to full-time roles, research collaborations, and freelance work. Based in Dhaka, Bangladesh.</p>
-    <div class="contact-links reveal">
-      <a href="mailto:281096.alif@gmail.com" class="contact-link">✉ 281096.alif@gmail.com</a>
-      <a href="tel:+8801776595404" class="contact-link">📞 +880 1776 595404</a>
-    </div>
-  </div>
-</section>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-white">ML / AI</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="pill">TensorFlow</span><span class="pill">PyTorch</span><span class="pill">scikit-learn</span><span class="pill">OpenCV</span><span class="pill">YOLO</span><span class="pill">Roboflow</span>
+                </div>
+            </div>
 
-<footer>
-  <p>Built with ❤️ · Md. Shoaib Shahria Alif · Dhaka, Bangladesh</p>
-</footer>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-white">Web & Databases</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="pill">React.js</span><span class="pill">HTML/CSS</span><span class="pill">Tailwind</span><span class="pill">Bootstrap</span><span class="pill">Flask</span><span class="pill">MySQL</span><span class="pill">MongoDB</span>
+                </div>
+            </div>
 
-<script>
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursor-ring');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx+'px'; cursor.style.top = my+'px'; });
-  function animRing() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    ring.style.left = rx+'px'; ring.style.top = ry+'px';
-    requestAnimationFrame(animRing);
-  }
-  animRing();
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-white">DevOps, Tools & Hardware</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="pill">Git</span><span class="pill">Docker</span><span class="pill">Vercel</span><span class="pill">Firebase</span><span class="pill">Netlify</span><span class="pill">Raspberry Pi</span><span class="pill">Arduino</span><span class="pill">ESP32</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-</script>
+    <section id="research" class="border-t border-[#1e293b] max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-4">Research & Papers</h2>
+        <p class="text-slate-400 mb-12">Published and ongoing academic work</p>
+
+        <div class="grid gap-6">
+            <div class="card p-6 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-[#f72585]"></div>
+                <div class="flex justify-between items-start gap-4 flex-col sm:flex-row">
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-2">TBX-Enhance: Deep Learning Based Low-Dose X-Ray Enhancement for Tuberculosis Detection</h3>
+                        <p class="text-slate-400 text-sm mb-4">OpenCV · GAN · Python · DenseNet-121 · U-Net</p>
+                    </div>
+                    <span class="bg-[#f72585]/10 border border-[#f72585]/30 text-[#f72585] text-xs px-3 py-1 rounded-full whitespace-nowrap">Ongoing</span>
+                </div>
+            </div>
+
+            <div class="card p-6 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-[#06d6a0]"></div>
+                <div class="flex justify-between items-start gap-4 flex-col sm:flex-row">
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-2">BengalDeltaFish: A Local Dataset for Fish Detection in Bangladeshi Markets</h3>
+                        <p class="text-slate-400 text-sm mb-4">Roboflow · YOLO</p>
+                        <a href="https://doi.org/10.1016/j.dib.2025.111764" target="_blank" class="text-blue-400 text-sm hover:underline flex items-center gap-1 w-fit">
+                            <i data-lucide="external-link" class="w-3 h-3"></i> Data in Brief — doi.org/10.1016/j.dib.2025.111764
+                        </a>
+                    </div>
+                    <span class="bg-[#06d6a0]/10 border border-[#06d6a0]/30 text-[#06d6a0] text-xs px-3 py-1 rounded-full whitespace-nowrap">Published</span>
+                </div>
+            </div>
+
+            <div class="card p-6 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-[#7c3aed]"></div>
+                <div class="flex justify-between items-start gap-4 flex-col sm:flex-row">
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-2">FishSnap: An Application for Fish Detection in Bangladeshi Markets</h3>
+                        <p class="text-slate-400 text-sm mb-4">Kotlin · YOLO · Ultralytics · Roboflow</p>
+                    </div>
+                    <span class="bg-[#7c3aed]/10 border border-[#7c3aed]/30 text-[#a78bfa] text-xs px-3 py-1 rounded-full whitespace-nowrap">Under Review</span>
+                </div>
+            </div>
+
+            <div class="card p-6 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-[#7c3aed]"></div>
+                <div class="flex justify-between items-start gap-4 flex-col sm:flex-row">
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-2">Eco-Friendly Inference: Energy Savings Through Prompt Compression</h3>
+                        <p class="text-slate-400 text-sm mb-4">Ollama · Transformers · Python 3</p>
+                    </div>
+                    <span class="bg-[#7c3aed]/10 border border-[#7c3aed]/30 text-[#a78bfa] text-xs px-3 py-1 rounded-full whitespace-nowrap">Under Review</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="border-t border-[#1e293b] max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-4">Featured Projects</h2>
+        <p class="text-slate-400 mb-12">A selection of my recent work</p>
+
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="card overflow-hidden flex flex-col group">
+                <div class="h-48 relative border-b border-[#1e293b] bg-[#020617]">
+                    <img src="./assets/images/doctorStation_1.jpg" alt="Doctor Station" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0" />
+                    <img src="./assets/images/doctorStation_2.jpeg" alt="Doctor Station" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0 group-hover:opacity-100" />
+                </div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-white">Doctor Station</h3>
+                        <a href="https://drive.google.com/file/d/1osTOpl2FPZl3caK6EYrcr8b0mKQFuxYT/view" target="_blank" class="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 13-6 6-6-6"/><path d="M12 19V5"/></svg> Live Demo
+                        </a>
+                    </div>
+                    <p class="text-slate-400 text-sm mb-6 flex-1">
+                        An IoT AI-doctor device providing basic medical suggestions to prevent scams in rural areas. Uses LLM prompt tuning to deliver accurate patient assistance on Raspberry Pi hardware.
+                    </p>
+                    <div class="bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 text-xs px-3 py-1.5 rounded mb-4 inline-block w-max">
+                        🏆 Champion — Microprocessor Lab Project Show
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs text-slate-500">React</span><span class="text-xs text-slate-500">Flask</span><span class="text-xs text-slate-500">Groq API</span><span class="text-xs text-slate-500">Llama-3.3 70B</span><span class="text-xs text-slate-500">Raspberry Pi</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card overflow-hidden flex flex-col group">
+                <div class="h-48 relative border-b border-[#1e293b] bg-[#020617]">
+                    <img src="./assets/images/unravel_1.png" alt="Unravel" class="absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-500 group-hover:opacity-0" />
+                    <img src="./assets/images/unravel_2.png" alt="Unravel" class="absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-500 opacity-0 group-hover:opacity-100" />
+                </div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-white">Unravel</h3>
+                        <a href="https://github.com/281096alif/unravel" target="_blank" class="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.03c3.18-.38 6.52-1.65 6.52-7.05a5.46 5.46 0 0 0-1.5-3.78c.15-.38.65-1.8-.15-3.72 0 0-1.2-.38-3.9 1.4a13.38 13.38 0 0 0-7 0c-2.7-1.78-3.9-1.4-3.9-1.4-.8 1.92-.3 3.34-.15 3.72A5.46 5.46 0 0 0 3 8.12c0 5.4 3.34 6.66 6.52 7.05a4.8 4.8 0 0 0-1 3.03v4"/><path d="M9 18c-3.14 1.5-4.64-1.5-6-2"/></svg> Code
+                        </a>
+                    </div>
+                    <p class="text-slate-400 text-sm mb-6 flex-1">
+                        An intelligent project management system with Kanban & Gantt views, AI-assisted task assignment, automated reminders, and real-time collaboration tools for team productivity.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs text-slate-500">PHP</span><span class="text-xs text-slate-500">HTML/CSS</span><span class="text-xs text-slate-500">JavaScript</span><span class="text-xs text-slate-500">MySQL</span><span class="text-xs text-slate-500">Selenium</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card overflow-hidden flex flex-col group">
+                <div class="h-48 relative border-b border-[#1e293b] bg-[#020617]">
+                    <img src="./assets/images/bibliophiles_corner_1.png" alt="Bibliophiles Corner" class="absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-500 group-hover:opacity-0" />
+                    <img src="./assets/images/bibliophiles_corner_2.png" alt="Bibliophiles Corner" class="absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-500 opacity-0 group-hover:opacity-100" />
+                </div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-white">Bibliophiles Corner</h3>
+                        <a href="https://github.com/281096alif/bibliophilesCorner_SE" target="_blank" class="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.03c3.18-.38 6.52-1.65 6.52-7.05a5.46 5.46 0 0 0-1.5-3.78c.15-.38.65-1.8-.15-3.72 0 0-1.2-.38-3.9 1.4a13.38 13.38 0 0 0-7 0c-2.7-1.78-3.9-1.4-3.9-1.4-.8 1.92-.3 3.34-.15 3.72A5.46 5.46 0 0 0 3 8.12c0 5.4 3.34 6.66 6.52 7.05a4.8 4.8 0 0 0-1 3.03v4"/><path d="M9 18c-3.14 1.5-4.64-1.5-6-2"/></svg> Code
+                        </a>
+                    </div>
+                    <p class="text-slate-400 text-sm mb-6 flex-1">
+                        A community platform for book enthusiasts to explore, discover, and review books. Features review sharing and a clean UI designed to foster reader engagement.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs text-slate-500">HTML/CSS</span><span class="text-xs text-slate-500">JavaScript</span><span class="text-xs text-slate-500">PHP</span><span class="text-xs text-slate-500">Bootstrap</span><span class="text-xs text-slate-500">MySQL</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card overflow-hidden flex flex-col group">
+                <div class="h-48 relative border-b border-[#1e293b] bg-[#020617]">
+                    <img src="./assets/images/uiu_automated_library_1.jpg" alt="UIU Automated Library" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0" />
+                    <img src="./assets/images/uiu_automated_library_2.jpg" alt="UIU Automated Library" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0 group-hover:opacity-100" />
+                </div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-white">UIU Automated Library</h3>
+                        <a href="https://drive.google.com/drive/folders/1G_9ea7Dg3-3frR8osnuq2yBGTknfbkMt?usp=sharing" target="_blank" class="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 13-6 6-6-6"/><path d="M12 19V5"/></svg> Live Demo
+                        </a>
+                    </div>
+                    <p class="text-slate-400 text-sm mb-6 flex-1">
+                        An automated library management system designed to solve common issues like time-consuming book searches, disorganized reading areas, and item theft. It features a conveyor-based book providing and returning system, self-parking noise-free chairs, and an RFID-based anti-theft gate.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs text-slate-500">Arduino Mega 2560</span><span class="text-xs text-slate-500">Servo & Stepper Motors</span><span class="text-xs text-slate-500">PIR Motion Sensor</span><span class="text-xs text-slate-500">RC522 RFID</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="border-t border-[#1e293b] max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-12">Academic Journey</h2>
+        
+        <div class="relative border-l border-[#334155] ml-3 space-y-12">
+            <div class="relative pl-8">
+                <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-2 top-1 border-4 border-[#030712]"></div>
+                <h3 class="text-xl font-bold text-white">BSc in Computer Science & Engineering</h3>
+                <div class="text-slate-400 mt-1 mb-2">United International University, Dhaka</div>
+                <div class="inline-block bg-[#0f172a] border border-[#1e293b] text-slate-300 text-xs px-3 py-1 rounded">
+                    CGPA 3.43 / 4.00 — Feb 2026
+                </div>
+            </div>
+
+            <div class="relative pl-8">
+                <div class="absolute w-4 h-4 bg-slate-600 rounded-full -left-2 top-1 border-4 border-[#030712]"></div>
+                <h3 class="text-xl font-bold text-white">Higher Secondary Certificate (HSC)</h3>
+                <div class="text-slate-400 mt-1 mb-2">Govt. Shah Sultan College, Dhaka</div>
+                <div class="inline-block bg-[#0f172a] border border-[#1e293b] text-slate-300 text-xs px-3 py-1 rounded">
+                    GPA 5.00 / 5.00 — 2020
+                </div>
+            </div>
+            
+            <div class="relative pl-8">
+                <div class="absolute w-4 h-4 bg-slate-600 rounded-full -left-2 top-1 border-4 border-[#030712]"></div>
+                <h3 class="text-xl font-bold text-white">Secondary School Certificate (SSC)</h3>
+                <div class="text-slate-400 mt-1 mb-2">BIAM Model School & College, Bogura</div>
+                <div class="inline-block bg-[#0f172a] border border-[#1e293b] text-slate-300 text-xs px-3 py-1 rounded">
+                    GPA 5.00 / 5.00 — 2018
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="border-t border-[#1e293b] max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-4">Get In Touch</h2>
+        <p class="text-slate-400 mb-12">Feel free to reach out for collaborations or just a friendly hello</p>
+
+        <div class="grid md:grid-cols-2 gap-12">
+            <div>
+                <h3 class="text-xl font-semibold mb-6 flex items-center gap-2">Let's Connect</h3>
+                <p class="text-slate-400 mb-8">
+                    I'm always interested in hearing about new projects and opportunities. Whether you have a question or just want to say hi, feel free to reach out!
+                </p>
+                <div class="space-y-4">
+                    <a href="mailto:281096.alif@gmail.com" class="flex items-center gap-3 text-slate-300 hover:text-white transition w-fit">
+                        <div class="w-10 h-10 rounded-full bg-[#0f172a] border border-[#1e293b] flex items-center justify-center">
+                            <i data-lucide="mail" class="w-5 h-5"></i>
+                        </div>
+                        281096.alif@gmail.com
+                    </a>
+                    <a href="tel:+8801776595404" class="flex items-center gap-3 text-slate-300 hover:text-white transition w-fit">
+                        <div class="w-10 h-10 rounded-full bg-[#0f172a] border border-[#1e293b] flex items-center justify-center">
+                            <i data-lucide="phone" class="w-5 h-5"></i>
+                        </div>
+                        +880 1776 595404
+                    </a>
+                    <div class="flex items-center gap-3 text-slate-300">
+                        <div class="w-10 h-10 rounded-full bg-[#0f172a] border border-[#1e293b] flex items-center justify-center">
+                            <i data-lucide="map-pin" class="w-5 h-5"></i>
+                        </div>
+                        Dhaka, Bangladesh
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-semibold mb-6">Open to Opportunities</h3>
+                <div class="card p-6">
+                    <p class="text-slate-400 mb-6 flex items-start gap-2">
+                        I'm currently available for full-time roles, research collaborations, and freelance work. If you're working on something interesting, I'd love to hear about it!
+                    </p>
+                    <div class="inline-block bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm px-4 py-2 rounded-full">
+                        <span class="inline-block w-2 h-2 rounded-full bg-blue-500 mr-2 animate-pulse"></span>Available for Hire
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-[#1e293b] py-8 mt-12 mb-[50px]">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-slate-500 text-sm">
+                © 2026 Md. Shoaib Shahria (Alif). All rights reserved.
+            </p>
+            <div class="flex gap-4">
+                <a href="https://github.com/281096alif" target="_blank" class="text-slate-500 hover:text-white transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.03c3.18-.38 6.52-1.65 6.52-7.05a5.46 5.46 0 0 0-1.5-3.78c.15-.38.65-1.8-.15-3.72 0 0-1.2-.38-3.9 1.4a13.38 13.38 0 0 0-7 0c-2.7-1.78-3.9-1.4-3.9-1.4-.8 1.92-.3 3.34-.15 3.72A5.46 5.46 0 0 0 3 8.12c0 5.4 3.34 6.66 6.52 7.05a4.8 4.8 0 0 0-1 3.03v4"/><path d="M9 18c-3.14 1.5-4.64-1.5-6-2"/></svg>
+                </a>
+                <a href="https://www.linkedin.com/in/shoaibshahria/" target="_blank" class="text-slate-500 hover:text-white transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                </a>
+            </div>
+            <!-- <p class="text-slate-500 text-sm">Dhaka, Bangladesh</p> -->
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>
